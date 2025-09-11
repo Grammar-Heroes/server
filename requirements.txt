@@ -1,5 +1,7 @@
 fastapi        == 0.116.1    # https://github.com/fastapi/fastapi
+asyncpg        == 0.30.0     
 uvicorn        == 0.35.0     # Required-by: fastapi-cli, fastapi-cloud-cli || https://www.uvicorn.org/
+sqlalchemy     == 2.0.43     # Required-by: alembic || https://www.sqlalchemy.org
 greenlet       == 3.2.4      # Required-by: SQLAlchemy || https://greenlet.readthedocs.io/
 pydantic       == 2.11.7     # Required-by: fastapi, fastapi-cloud-cli || https://github.com/pydantic/pydantic
 starlette      == 0.47.3     # Required-by: fastapi || https://github.com/encode/starlette
@@ -12,6 +14,7 @@ click          == 8.2.1      # Required-by: rich-toolkit, typer, uvicorn
 alembic        == 1.16.5     # https://alembic.sqlalchemy.org
 python-dotenv  == 1.1.1      # https://github.com/theskumar/python-dotenv
 firebase_admin == 7.1.0      # https://firebase.google.com/docs/admin/setup/
+language_tool_python == 2.9.4
 # IMPORTANT NOTE: language-tool will be installed soon
 
 # # FastAPI core
