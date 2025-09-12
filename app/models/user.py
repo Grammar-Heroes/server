@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, func
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, JSON
 from app.core.db import Base
 
 class User(Base):
@@ -10,3 +10,9 @@ class User(Base):
     display_name = Column(String, nullable=False)
     is_admin = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    node_structure_seeds = Column(
+        JSON,
+        nullable=False,
+        default={"floor1": None, "floor2": None, "floor3": None}
+    )

@@ -17,3 +17,4 @@ def verify_id_token(id_token: str) -> dict:
         return decoded
     except firebase_admin.exceptions.FirebaseError as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Firebase token") from exc
+
