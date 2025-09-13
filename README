@@ -1,35 +1,68 @@
 This is the backend for Grammar Heroes.
 
-Grammar Heroes is a game for anyone who wants to have fun constructing English sentences.
-The game is built for mobile, taking into consideration device accessibility within young Filipino students, especially our target demographic: Grades 4 through 6. 
-The idea behind the game is to create something that is not only educational, but also in a way, and we hopefully wish it is: engaging. 
-We understand that there exist various grammar applications, software, and other forms of digital tools that aid grammar correctness. 
-There is, for example, Duolingo which is really popular. 
-But it's not really the kind of application that you would offer a 10 year old if you want them to learn grammatically correct English. 
-There are gamification elements here and there inside Duolingo but data and empirical evidence suggest that, for our target demographic, which is Grades 4 through 6 Filipino students, which are 10 to 14 years old on average, it's not ideal. 
+Grammar Heroes is a game for anyone who wants to have fun constructing English sentences. 
+The game is built for mobile, taking into account device accessibility within young Filipino students, especially our target demographic: Grades 4-6. 
+The idea behind the game is to create something that is not only educational, but also, as cliche as it is, FUN. 
+We understand that there exist various grammar apps that aid grammar correctness and learning. 
+There is, for example, Duolingo, which is really popular, by the way. 
+But it's not really the GENRE of application that you would recommend a 10 year old wanting to learn grammatically correct English.
+Certainly, there are "gamification" elements here and there inside Duolingo.
+However, data and empirical evidence suggest that, for our target demographic, it's not ideal. 
 
-Hence, the vision behind Grammar Heroes is to foster an environment where kids can play, experiment, and feel safe getting sentences wrong.
+Hence, the vision behind Grammar Heroes is to foster an environment where kids can PLAY, EXPERIMENT, and FEEL SAFE GETTING SENTENCES WRONG.
+We want the kids to see where they went wrong, why it is wrong, and therefore correct it. 
 
-We want the students to see where they went wrong, why it is wrong, and therefore correct it. 
-And if they're correct, deal damage to enemies, go on an adventure, quite literally because the levels branch out, you can forge your own path so to speak because there are various options. 
+And if they're correct, deal damage to enemies. 
+They can go on an adventure, quite literally because the levels branch out, you can forge your own path so to speak because there are various options. 
+There isn't a single one path for you to finish the game, you can go from Level 1 to Level 2A or Level 2B for instance. 
+It's totally up to you. We want kids to experience that feeling of freedom to choose where they want to go. 
+They can customize their character. They can see where they rank among other players. They can see where they rank in a Knowledge Component. 
+Like, let's say if you play the Subject-Verb Agreement level multiple times, you definitely would get to a higher rank because your KC keeps updating. 
+And then you can view the Leaderboard for that KC and see yourself on top. And then you can move on to other KCs. 
 
-There isn't a single one path for you to finish the game, you can go from Level 1 to Level 2A or Level 2B for instance. It's totally up to you. We want kids to experience that feeling of freedom to choose where they want to go. They can customize their character. They can see where they rank among other players. They can see where they rank in a Knowledge Component. Like, let's say if you play the Subject-Verb Agreement level multiple times, you definitely would get to a higher rank because your KC keeps updating. And then you can view the Leaderboard for that KC and see yourself on top. And then you can move on to other KCs. 
+The point here is that, you have your personality in the game, you can make mistakes, make grammar errors, silly grammar errors, and no one would know, except perhaps the database.
+But it's more conducive to learn in an environment where nobody sees your mistakes except you.
+But not only do you see it, you see exactly what's wrong with it. 
+It's not announced in a class of 40 that you made this grammatical error. 
+It's announced, and shown ever so gently, only, to you, the player.
 
-The point here is that, you have your personality in the game, you can make mistakes, make grammar errors, silly grammar errors, and no one would know, except perhaps the database, but it's more conducive to learn in an environment where nobody sees your mistakes except you, but not only do you see it, you see exactly what's wrong with it. It's not announced in a class of 40 that you made this grammatical error. It's announced, and shown ever so gently, only, to you, the player.
+Now, let's talk about how the game really works on the Frontend side. 
+The game is built in Unity 6 using C#. While the game view is 2D, the game is actually made inside a 3D environment. 
+We want that really cool way of making elements appear 2.5D. 
+The light plays a huge role in creating an effective and engaging gaming experience. 
+The assets are therefore 3D models made in Blender. 
 
-Now, let's talk about how the game really works on the Frontend side. The game is built in Unity 6 using C#. While the game view is 2D, the game is actually made inside a 3D environment because we want that really cool way to make the elements appear 2.5D. The light plays a huge role in creating an effective and engaging gaming experience. The assets are therefore 3D models made in Blender. So let's have a quick run down of how the game goes.
+So let's have a quick run down of how the game goes.
 
-Imagine that you have downloaded the game on your phone. You then see the icon of the app, then you tap on it. The game loads its Login / Register screen. As someone who does not yet have an account, you click on Register. Upon clicking on the Register button, you are redirected in another page where you have three options to register an account. Either you create an Email/Password specifically for this game, register using an existing Google Account, or through Facebook.
+Imagine that you have downloaded the game on your phone. You then see the icon of the app, then you tap on it. 
+The game loads its Login / Register screen. As someone who does not yet have an account, you click on Register. 
+Upon clicking on the Register button, you are redirected in another page where you have three options to register an account. 
+Either you create an Email/Password specifically for this game, register using an existing Google Account, or through Facebook.
 
-This is the first problem in developing our game. We will use Firebase for Account Creation and Login. Then, we will use Neon.tech as our main database. I am not quite sure if we need Backend communication to build this Register feature. Give me some advice on this.
+This is the first problem in developing our game. (Note: Not anymore.)
+We will use Firebase for Account Creation and Login. Then, we will use Neon.tech as our main database. 
 
-Now, let's say you have successfully created an account. You are redirected to the Login Screen where you can login using your newly created account. So, you click on Login through Google, you choose the Google Account you just registered, and wow! You've successfully logged in to our game.
+Now, let's say you have successfully created an account. You are redirected to the Login Screen where you can login using your newly created account. 
+So, you click on Login through Google, you choose the Google Account you just registered, and wow! You've successfully logged in to our game.
 
-This is another problem. It's quite the same problem as our Register Problem. I don't see how the communication between Frontend, Firebase, Backend, and Neon.tech will work. That's the first thing we have to figure out.
+This is another problem. It's quite the same problem as our Register Problem. 
+I don't see how the communication between Frontend, Firebase, Backend, and Neon.tech will work. 
+That's the first thing we have to figure out. (Note: I figured this out.)
 
-Okay, assuming that problem is now out of the way, and that you've successfully logged in. What's next? Well, you see the Home Screen! It's a simple Home Screen. You have a few buttons to click on. Play, Settings, Help, Leaderboards, etc.
+Okay, assuming that problem is now out of the way, and that you've successfully logged in. 
+What's next? Well, you see the Home Screen! It's a simple Home Screen. You have a few buttons to click on. Play, Settings, Help, Leaderboards, etc.
 
-Of course, our main focus here is the Play button. You click on "Play". You're now redirected to the Floor Screen. The game has three main floors, it's our way of saying, "This represents Grades 4, 5, and 6." Inside each Floor, say Floor 1, there are various Nodes, each node represents a level. As said earlier: "There isn't a single one path for you to finish the game, you can go from Level 1 to Level 2A or Level 2B for instance." The Nodes don't just connect 1 : 1. Some nodes connect to two other nodes or sometimes 3 other nodes. And you are free to go to any of them! But of course, as you're someone who just downloaded the game and your account is newly created, you can only play at the first Level, for now. So, you're currently at [Floor 1 | Level 1]. But, wait, what happens in the backend when you click on the level?
+Of course, our main focus here is the Play button. You click on "Play". You're now redirected to the Floor Screen. 
+The game has three main floors, it's our way of saying, 
+"This represents Grades 4, 5, and 6." 
+Inside each Floor, say Floor 1, there are various Nodes, each node represents a level.
+As said earlier: "There isn't a single one path for you to finish the game, you can go from Level 1 to Level 2A or Level 2B for instance." 
+The Nodes don't just connect 1 : 1. Some nodes connect to two other nodes or sometimes 3 other nodes. 
+And you are free to go to any of them! 
+But of course, as you're someone who just downloaded the game and your account is newly created, you can only play at the first Level, for now. 
+So, you're currently at [Floor 1 | Level 1]. 
+
+But, wait, what happens in the backend when you click on the level?
 
 Well, to understand what GET request we're doing upon choosing a level, we first have to see a sample gameplay:
 
@@ -70,7 +103,6 @@ Sentence = A funny bear sings and dances in front.
 15. You then hit "Write" to submit this sentence. The timer stops while the sentence is being analyzed. It was found that you submitted a grammatically correct sentence at first try! That's impressive!
 16. You dealt a ton of damage to the enemies, successfully defeating 2/3 of them! Now, you only have one enemy left!
 17. You start to observe the objectives, and you just completed two of them! You used all the words/cards in a given word set! And... you also used two verbs in one sentence! That's very amazing!
-
 18. But, the jobs not done. You are now given another word set. The timer resets.
 
 Word Set = [Prix, Their, Way, Drive, Through, Drives, The, Drivers, The, Dutch, Grand]
@@ -80,20 +112,15 @@ Word Set = [Prix, Their, Way, Drive, Through, Drives, The, Drivers, The, Dutch, 
 Sentence = "The drivers drive their way through the Dutch Grand Prix."
 
 20. You submitted the sentence, the timer stops, the sentence is being analyzed, you feel the tension, and then suddenly, insane damage was dealt to the last one of the enemies! The last enemy is defeated!!! Your objective is complete! You got 3 STARS!
-
 21. The victory screen shows up. It's an evaluation of the level, the objectives you completed, and the best sentence (longest one) you came up with in this level.
-
 22. Here's a note: The player is given two tries to submit a sentence, if both attempts fail, the enemies can attack them! The enemies don't really write their own sentences, they just attack you, and your health gets... lower. Which basically means... you lose if your health goes to zero, you win if the enemies' health goes to zero. But it's not just the enemy that you're fighting against, you're also against time, pressure, etc.
-
 23. You click "Next Level", but really, you are redirected to the Node Selection screen because apparently, there isn't a single one "next level", you are presented with "Level 2A or Level 2B"! That's cool as heck, you can choose what you want!
-
 
 Okay, so that's how it works in the frontend. Now, let's see how this plays out in the backend. To understand this, we have to go back to the very first step:
 
 Step 1: You click on the Node. [Floor 1 | Level 1]
 
 No requests to the backend is actually made here. But something important happens. You see, each level is assigned one Knowledge Component. Let's call that KC. For example, [Floor 1 | Level 1] has the KC, "Subject-Verb Agreement". This essentially decides what word sets will be available for such level. Because the "topic", so to speak, largely decides what words should be present in the word set, we have to match the Knowledge Component to the topic of the level to the word sets available for that level.
-
 For instance, notice how the first word set available for you in this level is:
 
 Word Set = ["Dog", "Across", "Street", "Run", "Runs", "The", "The"]
