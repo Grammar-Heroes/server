@@ -12,3 +12,13 @@ class UserOut(BaseModel):
     class Config:
         # before: orm_mode = True
         from_attributes = True
+
+class NodeSeed(BaseModel):
+    seed: str
+
+class UserWithSeed(BaseModel):
+    firebase_uid: str
+    seed: str
+
+    class Config:
+        from_attributes = True

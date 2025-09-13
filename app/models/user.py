@@ -11,8 +11,7 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    node_structure_seeds = Column(
-        JSON,
-        nullable=False,
-        default={"floor1": None, "floor2": None, "floor3": None}
-    )
+    node_structure_seed = Column(String, nullable=True)
+
+# NOTE : "from sqlalchemy import func" might not work as expected.
+# NOTE : use "sqlalchemy.sql import func" in a separate line if ever

@@ -1,14 +1,44 @@
-from fastapi import APIRouter, Depends, HTTPException
-from app.schemas.gameplay import SubmissionCreate
+from fastapi import APIRouter, Depends
+from app.schemas.gameplay import SubmissionCreate, SubmissionOut
 from app.core.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import get_current_user
 from app.services import grammar, bkt
-from app import crud
+from app.crud import submission as submission_crud # to avoid variable clashing
+from app.services.grammar import check_sentence
 
 router = APIRouter(prefix="/gameplay", tags=["gameplay"])
 
-@router.post("/submit")
+@router.post("/submit", response_model=SubmissionOut)
+async def submit_sentence(
+    payload: SubmissionCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    feedback = await check_sentence(payload.sentence)
+    submission = await submission_crud.create_submission(
+        db,
+        user_id=current_user.id,
+        kc_id=payload.kc_id,
+        sentence=payload.sentence,
+        feedback=feedback,
+    )
+    return {
+        "is_correct": bool(submission.is_correct),
+        "error_indices": submission.feedback.get("error_indices", [])
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 async def submit_submission(payload: SubmissionCreate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):
 
     #grammar
