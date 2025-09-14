@@ -19,3 +19,7 @@ async def create_from_firebase(db: AsyncSession, firebase_uid: str, email: str |
     await db.commit()
     await db.refresh(user)
     return user
+
+# review crud/user
+# create_from_firebase() only creates the "firebase_uid", "email", and "display_name"
+# how about the other attributes of user?

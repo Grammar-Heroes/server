@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import auth, gameplay, users, progress
+from app.routers import auth, gameplay, users, progress, adaptive, inventory
 from app.core.config import settings
 
 def create_app() -> FastAPI:
@@ -10,6 +10,8 @@ def create_app() -> FastAPI:
     app.include_router(gameplay.router)
     app.include_router(users.router)
     app.include_router(progress.router)
+    app.include_router(adaptive.router)
+    app.include_router(inventory.router)
 
     @app.on_event("startup")
     async def startup():

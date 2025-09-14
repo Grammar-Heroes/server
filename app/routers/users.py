@@ -9,7 +9,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.get("/node_structure", response_model=UserWithSeed)
 async def get_node_structure(current_user: User = Depends(get_current_user)):
-    return {"uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
+    return {"firebase_uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
 
 @router.post("/node_structure", response_model=UserWithSeed)
 async def set_node_structure(
@@ -21,4 +21,17 @@ async def set_node_structure(
     db.add(current_user)
     await db.commit()
     await db.refresh(current_user)
-    return {"uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
+    return {"firebase_uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
+
+# MIGHT IMPLEMENT SOON
+
+# Profile endpoints
+# GET /users/me → return profile info (UserOut).
+# PATCH /users/me → update display name, email, etc.
+
+# Admin endpoints
+# GET /users/ → list all users (requires is_admin = True).
+# DELETE /users/{id} → remove a user (again, admin-only).
+
+# Settings endpoints
+# (e.g. language preferences, notification preferences, etc.)

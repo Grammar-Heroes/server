@@ -3,9 +3,10 @@ from app.schemas.gameplay import SubmissionCreate, SubmissionOut
 from app.core.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import get_current_user
-from app.services import grammar, bkt
+from app.services import grammar
 from app.crud import submission as submission_crud # to avoid variable clashing
 from app.services.grammar import check_sentence
+from app.crud import knowledge as knowledge_crud
 
 router = APIRouter(prefix="/gameplay", tags=["gameplay"])
 
@@ -16,6 +17,10 @@ async def submit_sentence(
     current_user = Depends(get_current_user)
 ):
     feedback = await check_sentence(payload.sentence)
+    is_correct = feedback["is_correct"]
+
+    await knowledge_crud.update_knowledge(db, current_user.id, payload.kc_id, is_correct)
+
     submission = await submission_crud.create_submission(
         db,
         user_id=current_user.id,
@@ -27,17 +32,6 @@ async def submit_sentence(
         "is_correct": bool(submission.is_correct),
         "error_indices": submission.feedback.get("error_indices", [])
     }
-
-
-
-
-
-
-
-
-
-
-
 
 async def submit_submission(payload: SubmissionCreate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):
 
@@ -65,4 +59,3 @@ async def submit_submission(payload: SubmissionCreate, db: AsyncSession = Depend
         # "score": score,
         "kc_id": payload.kc_id
     }
-
