@@ -14,7 +14,7 @@ def select_worst_kc(kcs: list[KnowledgeProgress], eligible_kc_ids: list[int]) ->
         return None
     worst = min(
         filtered,
-        key=lambda kc: kc.correct / kc.attempts if kc.attempts > 0 else 0
+        key=lambda kc: kc.p_know
     )
 
     return worst.kc_id
