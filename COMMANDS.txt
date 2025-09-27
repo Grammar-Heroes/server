@@ -1,0 +1,3 @@
+GET FOLDER STRUCTURE:
+
+tree app /F /A | findstr /V ".pyc"

@@ -1,11 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, JSON
+from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey, DateTime
 from sqlalchemy.sql import func
 from app.core.db import Base
-
-class Adventure(Base):
-    __tablename__ = "adventure"
-
-    # id int
+ # id int
     # user_id int
     # adventure_id string
     # items_collected string[] = {}
@@ -46,7 +42,7 @@ class Adventure(Base):
     # 2. [Loading Screen] Frontend requests the worst KC from backend, stores it as current_adaptive_kc
     # 3. [Loading Screen] Database updates record (db UpdateAdventure())
     # 4. [Loading Screen] Frontend generates the next Adaptive Node according to the worst KC
-
+    
     # D) Functions needed to be defined (that i can think of lol)
     # db NewAdventure() using user ID, if no ongoing adventure, create a new adventure record
     # db UpdateAdventure() using user ID, updates the record with the data from Frontend
@@ -68,3 +64,28 @@ class Adventure(Base):
     # items_collected = { "fae_flower" }
     # Dragon Skull, Dragon Tooth, The Aegis 
     # items_collected = { "fae_flower", "dragon_skull", "dragon_tooth" }
+
+class Adventure(Base):
+    __tablename__ = "adventure"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    adventure_id = Column(String, nullable=False, unique=True) #seed
+    items_collected = Column(ARRAY(String), default=list)
+    cleared_ndoes = Column(ARRAY(String), default=list)
+    current_adaptive_kc = Column(String)
+
+    # Stats/Levels
+    enemy_level = Column(Integer, default=1)
+    enemy_writing_level = Column(Integer, default=1)
+    enemy_defense_level = Column(Integer, default=1)
+    player_level = Column(Integer, default=1)
+    writing_level = Column(Integer, default=1)
+    defense_level = Column(Integer, default=1)
+    current_floor = Column(Integer, default=1)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    
+
+   

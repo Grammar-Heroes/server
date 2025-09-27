@@ -14,6 +14,8 @@ def verify_id_token(id_token: str) -> dict:
     init_firebase()
     try:
         decoded = auth.verify_id_token(id_token)
+        print("Decoded token:", decoded)  # <-- log the payload
         return decoded
-    except firebase_admin.exceptions.FirebaseError as exc:  
+    except Exception as exc:  
+        print("Token verification failed:", exc)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Firebase token") from exc
