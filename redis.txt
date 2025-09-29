@@ -1,0 +1,7 @@
+1. Install Redis and Python Client
+    - Make sure you have a Redis server running (locally or remote).
+    - Install the Python Redis client.
+
+pip install redis[async]
+
+2. Pydantic Schema

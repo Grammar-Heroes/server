@@ -8,7 +8,7 @@ from app.models.user import User
 
 router = APIRouter(prefix="/adventure", tags=["adventure"])
 
-@router.get("/current", resposne_model=AdventureOut)
+@router.get("/current", response_model=AdventureOut)
 async def get_current_adventure(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)

@@ -1,3 +1,4 @@
 .venv
 .env
 /sensitive
+/deleted

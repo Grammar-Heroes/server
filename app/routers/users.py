@@ -8,22 +8,21 @@ from app import crud
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-@router.get("/node_structure", response_model=UserWithSeed)
-async def get_node_structure(current_user: User = Depends(get_current_user)):
-    return {"firebase_uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
+# @router.get("/node_structure", response_model=UserWithSeed)
+# async def get_node_structure(current_user: User = Depends(get_current_user)):
+#     return {"firebase_uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
 
-@router.post("/node_structure", response_model=UserWithSeed)
-async def set_node_structure(
-    payload: NodeSeed, 
-    db: AsyncSession = Depends(get_db), 
-    current_user: User = Depends(get_current_user),
-):
-    current_user.node_structure_seed = payload.seed # use model_dump instead
-    db.add(current_user)
-    await db.commit()
-    await db.refresh(current_user)
-    return {"firebase_uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
-
+# @router.post("/node_structure", response_model=UserWithSeed)
+# async def set_node_structure(
+#     payload: NodeSeed, 
+#     db: AsyncSession = Depends(get_db), 
+#     current_user: User = Depends(get_current_user),
+# ):
+#     current_user.node_structure_seed = payload.seed # use model_dump instead
+#     db.add(current_user)
+#     await db.commit()
+#     await db.refresh(current_user)
+#     return {"firebase_uid": current_user.firebase_uid, "seed": current_user.node_structure_seed}
 
 @router.get("/me", response_model=UserOut)
 async def get_me(current_user: User = Depends(get_current_user)):
@@ -36,6 +35,7 @@ async def update_me(
     current_user: User = Depends(get_current_user),
 ):    
     return await crud.user.update_user(db, current_user, updates)
+
 # MIGHT IMPLEMENT SOON
 
 # Profile endpoints
@@ -48,5 +48,3 @@ async def update_me(
 
 # Settings endpoints
 # (e.g. language preferences, notification preferences, etc.)
-
-

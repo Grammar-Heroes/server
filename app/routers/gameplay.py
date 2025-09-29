@@ -3,10 +3,13 @@ from app.schemas.gameplay import SubmissionCreate, SubmissionOut
 from app.core.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import get_current_user
-from app.services import grammar
-from app.crud import submission as submission_crud # to avoid variable clashing
 from app.services.grammar import check_sentence
+from app.crud import submission as submission_crud
 from app.crud import knowledge as knowledge_crud
+import logging
+
+logger = logging.getLogger("uvicorn")
+logging.basicConfig(level=logging.INFO)
 
 router = APIRouter(prefix="/gameplay", tags=["gameplay"])
 
@@ -16,27 +19,41 @@ async def submit_sentence(
     db: AsyncSession = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
+    # 1️⃣ Check grammar (will check Redis first)
     feedback = await check_sentence(payload.sentence)
     is_correct = feedback["is_correct"]
 
+    # Log cache usage
+    if feedback.get("from_cache", False):
+        logger.info(f"[CACHE HIT] {payload.sentence}")
+    else:
+        logger.info(f"[CACHE MISS] {payload.sentence}")
+
+    # 2️⃣ Update user's knowledge (BKT)
     await knowledge_crud.update_knowledge(db, current_user.id, payload.kc_id, is_correct)
 
+    # 3️⃣ Create submission in DB
     submission = await submission_crud.create_submission(
         db,
         user_id=current_user.id,
         kc_id=payload.kc_id,
         sentence=payload.sentence,
-        feedback=feedback,
+        feedback=feedback
     )
+
+    # 4️⃣ Return response including cache flag
     return {
         "is_correct": bool(submission.is_correct),
-        "error_indices": submission.feedback.get("error_indices", [])
+        "error_indices": submission.feedback.get("error_indices", []),
+        "feedback": submission.feedback.get("feedback", []),
+        "from_cache": feedback.get("from_cache", False)
     }
 
-async def submit_submission(payload: SubmissionCreate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):
+
+# async def submit_submission(payload: SubmissionCreate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):
 
     #grammar
-    corrected, issues = grammar.check_sentence(payload.sentence)
+    # corrected, issues = grammar.check_sentence(payload.sentence)
 
     # naive scoring: higher issues => lower score (0..100)
     # score = max(0, int(round((1 - min(1.0, issues * 0.2)) * 100)))
@@ -52,10 +69,10 @@ async def submit_submission(payload: SubmissionCreate, db: AsyncSession = Depend
     # next_prior = bkt.update_bkt(prior, is_correct=(score>70))
     # await crud.progress.set_mastery(db, current_user.id, payload.kc_id, next_prior)
 
-    return {
-        "original": payload.sentence,
-        "corrected": corrected,
-        "issues_found": issues,
-        # "score": score,
-        "kc_id": payload.kc_id
-    }
+    # return {
+    #     "original": payload.sentence,
+    #     "corrected": corrected,
+    #     "issues_found": issues,
+    #     # "score": score,
+    #     "kc_id": payload.kc_id
+    # }

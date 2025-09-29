@@ -14,5 +14,5 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    node_structure_seed = Column(String, nullable=True)
-    # TODO: Decide when to generate node_structure_seed (e.g., after first login or during profile completion)
+    # node_structure_seed will now be moved to the 'adventure' table
+    # node_structure_seed = Column(String, nullable=True)
