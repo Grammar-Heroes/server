@@ -16,7 +16,7 @@ class TokenIn(BaseModel):
 
 @router.post("/firebase")
 async def firebase_login(token_in: TokenIn, db: AsyncSession = Depends(get_db)):
-    # verify Firebase token
+    # 1️⃣ Verify Firebase token
     decoded = verify_id_token(token_in.id_token)
     uid = decoded.get("uid")
     if not uid:
@@ -25,17 +25,19 @@ async def firebase_login(token_in: TokenIn, db: AsyncSession = Depends(get_db)):
             detail="Invalid token payload."
         )
 
-    # find or create user
+    # 2️⃣ Find or create user
     user = await crud.user.get_by_firebase_uid(db, uid)
     is_new_user = False
     if not user:
+        # Do NOT assign a default display_name
         user = await crud.user.create_from_firebase(
-            db, uid, decoded.get("email"), decoded.get("name")
+            db, uid, decoded.get("email"), decoded.get("name")  # can be None
         )
         is_new_user = True
 
-    # decide if profile completion is needed
-    first_login = is_new_user or not user.grade_level
+    # 3️⃣ Decide if profile completion is needed
+    # first_login is True if this is a new user OR they have no display_name yet
+    first_login = is_new_user or not user.display_name
 
     return {
         "user": UserOut.model_validate(user),  # serialize with Pydantic

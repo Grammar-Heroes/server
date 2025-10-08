@@ -1,0 +1,144 @@
+// LoadAnimHandler.cs
+using System;
+using System.Collections;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
+
+[DisallowMultipleComponent]
+public class LoadAnimHandler : MonoBehaviour
+{
+    [Header("Refs (required)")]
+    [SerializeField] private RectTransform bg;     // has Image
+    [SerializeField] private RectTransform note;
+    [SerializeField] private RectTransform c1;
+    [SerializeField] private RectTransform c2;
+
+    [Header("Timings")]
+    [SerializeField] private float fadeTime = 0.35f;
+    [SerializeField] private float noteInTime = 1.0f;
+    [SerializeField] private float c1ScaleTime = 2.0f;
+    [SerializeField] private float c2ScaleTime = 1.3f;
+    [SerializeField] private float c2Delay = 0.5f;
+    [SerializeField] private float startDelay = 0.15f;
+
+    [Header("Behavior")]
+    [SerializeField] private bool autoDestroyRoot = false; // set true if this sits under a temporary canvas
+    [SerializeField] private bool debugAutoStart = false;
+
+    public Action OnLoadingComplete;
+    public bool HasFinished { get; private set; }
+
+    Image bgImage;
+    TaskCompletionSource<bool> tcs;
+    bool isPlaying;
+
+    void Awake()
+    {
+        // Validate
+        if (!bg || !note || !c1 || !c2) { Debug.LogError("[LoadAnimHandler] Assign all transforms."); enabled = false; return; }
+        bgImage = bg.GetComponent<Image>();
+        if (!bgImage) { Debug.LogError("[LoadAnimHandler] bg needs Image."); enabled = false; return; }
+
+        ResetState();
+    }
+
+    void Start()
+    {
+        if (debugAutoStart && !isPlaying) _ = PlayAsync();
+    }
+
+    // Public API
+    public void LoadAnimation() => _ = PlayAsync();
+    public void LoadAnimation(Action onComplete) { OnLoadingComplete = onComplete; _ = PlayAsync(); }
+
+    public async Task PlayAsync()
+    {
+        if (HasFinished && !isPlaying) ResetState();
+        if (isPlaying)
+        {
+            await AwaitExisting();
+            return;
+        }
+        isPlaying = true;
+        tcs = new TaskCompletionSource<bool>();
+
+        StartCoroutine(PlayCR());
+
+        await tcs.Task; // completes when animation ends
+    }
+
+    public void ForceComplete()
+    {
+        if (HasFinished) return;
+
+        StopAllCoroutines();
+        // snap to end
+        bgImage.color = new Color(0f, 0f, 0f, 0.9f);
+        note.anchoredPosition = Vector2.zero;
+        c1.localScale = Vector3.one * 9f;
+        c2.localScale = Vector3.one * 9f;
+
+        Finish();
+    }
+
+    public void ResetState()
+    {
+        StopAllCoroutines();
+        isPlaying = false;
+        HasFinished = false;
+        tcs = null;
+
+        bgImage.color = Color.clear;
+        note.anchoredPosition = new Vector2(0f, 2000f);
+        note.localScale = Vector3.one;
+        c1.localScale = Vector3.zero;
+        c2.localScale = Vector3.zero;
+    }
+
+    IEnumerator PlayCR()
+    {
+        // fade bg
+        LeanTween.value(bg.gameObject, bgImage.color, new Color(0, 0, 0, 0.9f), fadeTime)
+                 .setOnUpdate(c => bgImage.color = c);
+
+        // slide note
+        bool noteDone = false;
+        LeanTween.move(note, Vector3.zero, noteInTime)
+                 .setEase(LeanTweenType.easeOutBack)
+                 .setDelay(startDelay)
+                 .setOnComplete(() => noteDone = true);
+        yield return new WaitUntil(() => noteDone);
+
+        // bursts
+        LeanTween.scale(c1, Vector3.one * 9f, c1ScaleTime).setEase(LeanTweenType.easeOutBack);
+
+        bool c2Done = false;
+        LeanTween.scale(c2, Vector3.one * 9f, c2ScaleTime)
+                 .setEase(LeanTweenType.easeOutBack)
+                 .setDelay(c2Delay)
+                 .setOnComplete(() => c2Done = true);
+        yield return new WaitUntil(() => c2Done);
+
+        Finish();
+    }
+
+    async Task AwaitExisting()
+    {
+        // wait for current tcs if any
+        var waiter = tcs;
+        if (waiter != null) await waiter.Task;
+    }
+
+    void Finish()
+    {
+        HasFinished = true;
+        isPlaying = false;
+        OnLoadingComplete?.Invoke();
+        tcs?.TrySetResult(true);
+
+        if (autoDestroyRoot) Destroy(transform.root.gameObject);
+    }
+}
+
+

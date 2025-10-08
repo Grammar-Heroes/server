@@ -4,8 +4,6 @@ from app.models.adventure import Adventure
 from app.schemas.adventure import AdventureCreate, AdventureUpdate
 from typing import Optional
 
-# get user adventure
-
 async def get_user_adventure(db: AsyncSession, user_id: int) -> Optional[Adventure]:
     """Get the user's current adventure."""
     q = select(Adventure).where(Adventure.user_id == user_id)

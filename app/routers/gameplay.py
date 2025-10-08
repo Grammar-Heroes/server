@@ -48,31 +48,3 @@ async def submit_sentence(
         "feedback": submission.feedback.get("feedback", []),
         "from_cache": feedback.get("from_cache", False)
     }
-
-
-# async def submit_submission(payload: SubmissionCreate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):
-
-    #grammar
-    # corrected, issues = grammar.check_sentence(payload.sentence)
-
-    # naive scoring: higher issues => lower score (0..100)
-    # score = max(0, int(round((1 - min(1.0, issues * 0.2)) * 100)))
-
-    # Create submission row (crud.submission should be implemented)
-    # For now we just return the core response and sketch how to update BKT:
-    # - fetch user's prior mastery on kc_id (crud.progress.get_user_kc)
-    # - update using bkt.update_bkt
-    # - store back to DB
-
-    # PSEUDO (you'll implement crud.progress functions similarly to crud.user):
-    # prior = await crud.progress.get_mastery(db, current_user.id, payload.kc_id) or 0.2
-    # next_prior = bkt.update_bkt(prior, is_correct=(score>70))
-    # await crud.progress.set_mastery(db, current_user.id, payload.kc_id, next_prior)
-
-    # return {
-    #     "original": payload.sentence,
-    #     "corrected": corrected,
-    #     "issues_found": issues,
-    #     # "score": score,
-    #     "kc_id": payload.kc_id
-    # }

@@ -18,9 +18,9 @@ async def get_by_id(db: AsyncSession, id: int) -> Optional[User]:
 
 
 async def create_from_firebase(db: AsyncSession, uid: str, email: str, name: str | None):
-    if not name:  # fallback if Firebase doesn't provide one
-        name = email.split("@")[0]  # e.g., use prefix of email
-        # or just name = "Player"
+    # if not name:  # fallback if Firebase doesn't provide one
+    #     name = email.split("@")[0]  # e.g., use prefix of email
+    #     # or just name = "Player"
 
     new_user = User(
         firebase_uid=uid,

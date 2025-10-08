@@ -72,7 +72,7 @@ class Adventure(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     adventure_id = Column(String, nullable=False, unique=True) #seed
     items_collected = Column(ARRAY(String), default=list)
-    cleared_ndoes = Column(ARRAY(String), default=list)
+    cleared_nodes = Column(ARRAY(String), default=list)
     current_adaptive_kc = Column(String)
 
     # Stats/Levels

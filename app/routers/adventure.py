@@ -5,6 +5,7 @@ from app.core.security import get_current_user
 from app.schemas.adventure import AdventureCreate, AdventureOut, AdventureUpdate
 from app.crud import adventure as adventure_crud
 from app.models.user import User
+import uuid
 
 router = APIRouter(prefix="/adventure", tags=["adventure"])
 
@@ -16,7 +17,7 @@ async def get_current_adventure(
     """Get the user's current adventure."""
     adventure = await adventure_crud.get_user_adventure(db, current_user.id)
     if not adventure:
-        raise HTTPException(status_code=404, detaul="No active adventure found")
+        raise HTTPException(status_code=404, detail="No active adventure found")
     return adventure
 
 @router.post("/", response_model=AdventureOut)
@@ -29,7 +30,7 @@ async def create_new_adventure(
     # check if user already has an active adventure
     existing = await adventure_crud.get_user_adventure(db, current_user.id)
     if existing:
-        raise HTTPException(
+        raise HTTPException( 
             status_code=400,
             detail="User already has an active adventuure"
         )

@@ -1,0 +1,83 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+
+public class LoadingHandler : MonoBehaviour
+{
+    private Dictionary<string, Func<IEnumerator>> _loaders;
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+        _loaders = new Dictionary<string, Func<IEnumerator>>
+    {
+        { "LoginTitle", LoginLoadTitle },
+        { "TitleAdventure", TitleLoadAdventure },
+        { "AdventureStage", AdventureLoadStage },
+        { "AdventureTitle", AdventureLoadTitle },
+        { "StageAdventure", StageLoadAdventure }
+    };
+    }
+
+    public void StartMyCoroutine(string loadType)
+    {
+        if (_loaders.TryGetValue(loadType, out var coroutine))
+        {
+            StartCoroutine(coroutine());
+        }
+        else
+        {
+            Debug.LogWarning($"No coroutine defined for {loadType}");
+        }
+    }
+
+    IEnumerator StartLoad()
+    {
+        SceneManager.LoadScene("LoadingScreen");
+        yield return new WaitForSeconds(1f);
+    }
+
+    IEnumerator LoginLoadTitle()
+    {
+        yield return StartLoad();
+        ToScreen("TitleScreen");
+    }
+
+    IEnumerator TitleLoadAdventure()
+    {
+        
+        if (string.IsNullOrEmpty(GameData.adventureId))
+        {
+            Debug.LogWarning("No adventure_id. User must press Start New Adventure.");
+            yield break;
+        }
+
+        // Safe to show loading now
+        yield return StartLoad();
+        ToScreen("AdventureScreen");
+    }
+
+    IEnumerator AdventureLoadStage()
+    {
+        yield return StartLoad();
+        ToScreen("BattleScreen");
+    }
+
+    IEnumerator StageLoadAdventure()
+    {
+        yield return StartLoad();
+        ToScreen("AdventureScreen");
+    }
+
+    IEnumerator AdventureLoadTitle()
+    {
+        yield return StartLoad();
+        ToScreen("TitleScreen");
+    }
+
+    void ToScreen(string screen)
+    {
+        SceneManager.LoadScene(screen);
+    }
+}

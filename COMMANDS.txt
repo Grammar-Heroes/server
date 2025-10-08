@@ -1,3 +1,7 @@
 GET FOLDER STRUCTURE:
 
 tree app /F /A | findstr /V ".pyc"
+
+START REDIS SERVER
+
+sudo service redis-server start
