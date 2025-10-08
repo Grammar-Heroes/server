@@ -3,7 +3,7 @@ asyncpg        == 0.30.0
 uvicorn        == 0.35.0     # Required-by: fastapi-cli, fastapi-cloud-cli || https://www.uvicorn.org/
 torch          == 2.8.0      # Required-by: torchaudio, torchvision || https://pytorch.org/
 transformers   == 4.56.1     # Required-by: gramforer || https://github.com/huggingface/transformers
-gramformer     == 1.0        # https://github.com/PrithivirajDamodaran/Gramformer.git
+git+https://github.com/PrithivirajDamodaran/Gramformer.git        # https://github.com/PrithivirajDamodaran/Gramformer.git
 spacy          == 3.8.7      # Required-by: errant || https://spacy.io
 sqlalchemy     == 2.0.43     # Required-by: alembic || https://www.sqlalchemy.org
 greenlet       == 3.2.4      # Required-by: SQLAlchemy || https://greenlet.readthedocs.io/
