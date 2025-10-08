@@ -19,6 +19,9 @@ alembic        == 1.16.5     # https://alembic.sqlalchemy.org
 python-dotenv  == 1.1.1      # https://github.com/theskumar/python-dotenv
 firebase_admin == 7.1.0      # https://firebase.google.com/docs/admin/setup/
 language_tool_python == 2.9.4
+pydantic-settings==2.6.1     # https://github.com/pydantic/pydantic-settings
+redis[async] == 5.0.8
+
 # IMPORTANT NOTE: language-tool will be installed soon
 
 # # FastAPI core
