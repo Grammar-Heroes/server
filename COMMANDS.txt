@@ -5,3 +5,7 @@ tree app /F /A | findstr /V ".pyc"
 START REDIS SERVER
 
 sudo service redis-server start
+
+Deploy: 
+
+& "C:\Users\Windows\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd" run deploy grammar-heroes-backend --source . --region asia-southeast1 --memory 2Gi --port 8000 --allow-unauthenticated

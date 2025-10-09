@@ -18,7 +18,8 @@ async def create_adventure(
     """Create a new adventure for the user."""
     db_adventure = Adventure(
         user_id=user_id,
-        **adventure.model_dump()
+        # Avoid passing None/omitted fields so SQLAlchemy defaults can apply
+        **adventure.model_dump(exclude_unset=True, exclude_none=True)
     )
     db.add(db_adventure)
     await db.commit()

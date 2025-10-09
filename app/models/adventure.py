@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey, DateTime, event
 from sqlalchemy.sql import func
 from app.core.db import Base
  # id int
@@ -70,12 +70,14 @@ class Adventure(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    adventure_id = Column(String, nullable=False, unique=True) #seed
+    adventure_id = Column(String, nullable=False, unique=True)
+
+    # Collections
     items_collected = Column(ARRAY(String), default=list)
-    cleared_nodes = Column(ARRAY(String), default=list)
+    cleared_nodes = Column(ARRAY(String), default=lambda: ["node0_0"])
     current_adaptive_kc = Column(String)
 
-    # Stats/Levels
+    # Stats / Levels
     enemy_level = Column(Integer, default=1)
     enemy_writing_level = Column(Integer, default=1)
     enemy_defense_level = Column(Integer, default=1)
@@ -87,5 +89,9 @@ class Adventure(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
+@event.listens_for(Adventure, "init")
+def set_defaults(target, args, kwargs):
+    if target.cleared_nodes is None:
+        target.cleared_nodes = ["node0_0"]
 
    

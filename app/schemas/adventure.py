@@ -1,12 +1,12 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from datetime import datetime
 from typing import List, Optional
 
 
 class AdventureBase(BaseModel):
     adventure_id: str
-    items_collected: List[str] = []
-    cleared_nodes: List[str] = []
+    items_collected: Optional[List[str]] = None
+    cleared_nodes: Optional[List[str]] = None
     current_adaptive_kc: Optional[str] = None
 
     # Stats / Levels
@@ -21,7 +21,21 @@ class AdventureBase(BaseModel):
 
 class AdventureCreate(AdventureBase):
     """Used when creating a new adventure."""
-    pass
+    # Ensure new adventures start at node0_0 by default
+    cleared_nodes: List[str] = Field(default_factory=lambda: ["node0_0"])
+
+    @field_validator("cleared_nodes", mode="before")
+    @classmethod
+    def _ensure_default_when_empty(cls, v):
+        # Treat missing, None, or empty list/tuple as default
+        if v is None:
+            return ["node0_0"]
+        try:
+            if isinstance(v, (list, tuple)) and len(v) == 0:
+                return ["node0_0"]
+        except TypeError:
+            pass
+        return v
 
 
 class AdventureUpdate(BaseModel):
@@ -45,4 +59,4 @@ class AdventureOut(AdventureBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
-    model_config = ConfigDict(from_attributes=True)  # For Pydantic v2
+    model_config = ConfigDict(from_attributes=True)
