@@ -9,10 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-
 class TokenIn(BaseModel):
     id_token: str
-
 
 @router.post("/firebase")
 async def firebase_login(token_in: TokenIn, db: AsyncSession = Depends(get_db)):
