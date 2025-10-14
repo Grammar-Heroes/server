@@ -30,6 +30,8 @@ class SubmissionOut(BaseModel):
     best_candidate: Optional[str] = None
     candidates: List[CandidateFeedback] = []
     from_cache: bool = False
+    p_know: Optional[float] = None  # <-- add this line
 
     class Config:
         from_attributes = True
+

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth, gameplay, users, adaptive, inventory, adventure
+from app.routers import auth, gameplay, users, adaptive, inventory, adventure, knowledge
 from app.core.config import settings
 from app.utils.logger import setup_grammar_cache_logger
 import logging
@@ -36,6 +36,7 @@ def create_app() -> FastAPI:
     app.include_router(adaptive.router)
     app.include_router(inventory.router)
     app.include_router(adventure.router)
+    app.include_router(knowledge.router)
 
     # --- Events ---
     @app.on_event("startup")

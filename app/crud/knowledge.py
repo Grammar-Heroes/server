@@ -42,3 +42,14 @@ async def get_user_kcs(db: AsyncSession, user_id: int):
     )
     res = await db.execute(q)
     return res.scalars().all()
+
+async def get_knowledge_value(db: AsyncSession, user_id: int, kc_id: str) -> float:
+    from app.models.knowledge import KnowledgeProgress
+    result = await db.execute(
+        select(KnowledgeProgress.p_know).where(
+            KnowledgeProgress.user_id == user_id,
+            KnowledgeProgress.kc_id == kc_id
+        )
+    )
+    value = result.scalar_one_or_none()
+    return float(value) if value is not None else 0.5
